@@ -21,6 +21,12 @@ provider "aws" {
   alias   = "staging"
 }
 
+provider "aws" {
+  region  = var.region
+  profile = "andromeda-prod"
+  alias   = "prod"
+}
+
 resource "random_uuid" "this" {}
 data "aws_caller_identity" "this" {}
 

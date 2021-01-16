@@ -2,6 +2,25 @@ data "aws_route53_zone" "parent" {
   name = "andromeda.land."
 }
 
+resource "aws_route53_zone" "prod" {
+  provider = aws.prod
+  name     = "prod.andromeda.land."
+  tags     = local.tags
+}
+
+resource "aws_route53_record" "prod_ns" {
+  zone_id = data.aws_route53_zone.parent.zone_id
+  name    = aws_route53_zone.prod.name
+  type    = "NS"
+  ttl     = 300
+  records = [
+    aws_route53_zone.prod.name_servers[0],
+    aws_route53_zone.prod.name_servers[1],
+    aws_route53_zone.prod.name_servers[2],
+    aws_route53_zone.prod.name_servers[3],
+  ]
+}
+
 resource "aws_route53_zone" "staging" {
   provider = aws.staging
   name     = "staging.andromeda.land."
